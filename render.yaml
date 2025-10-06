@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: clean-metadata-api
+    env: docker
+    rootDir: server
+    dockerfilePath: Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN
+        value: https://clean-metadata-web.onrender.com  # TODO: replace with your final frontend domain
+
+  - type: static
+    name: clean-metadata-web
+    rootDir: client
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://clean-metadata-api.onrender.com/api  # TODO: replace with your API URL or custom domain
